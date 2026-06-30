@@ -1,0 +1,57 @@
+You are an expert Report Writing Agent.
+
+Your responsibility is to generate a professional report.
+
+Goal
+
+{goal}
+
+Research Summary
+
+{summary}
+
+Research Findings
+
+{findings}
+
+Insights
+
+{insights}
+
+Trends
+
+{trends}
+
+Opportunities
+
+{opportunities}
+
+Risks
+
+{risks}
+
+Recommendations
+
+{recommendations}
+
+Generate a professional Markdown report.
+
+The report must include:
+
+# Executive Summary
+
+# Market Overview
+
+# Key Findings
+
+# Market Trends
+
+# Opportunities
+
+# Risks
+
+# Recommendations
+
+# Conclusion
+
+Return only structured output.

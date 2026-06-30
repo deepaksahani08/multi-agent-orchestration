@@ -5,6 +5,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.health import router as health_router
 from app.api.workflow import router as workflow_router
 
+from app.api.download import router as download_router
+
 
 app = FastAPI(
     title="Multi Agent Orchestration",
@@ -21,3 +23,4 @@ app.add_middleware(
 
 app.include_router(health_router)
 app.include_router(workflow_router)
+app.include_router(download_router)
