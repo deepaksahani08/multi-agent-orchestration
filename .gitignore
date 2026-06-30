@@ -1,0 +1,58 @@
+# ==========================
+# Python
+# ==========================
+__pycache__/
+*.py[cod]
+*.so
+
+# ==========================
+# Virtual Environment
+# ==========================
+venv/
+.venv/
+env/
+ENV/
+
+# ==========================
+# Environment Variables
+# ==========================
+.env
+backend/.env
+
+# ==========================
+# Build & Distribution
+# ==========================
+build/
+dist/
+*.egg-info/
+
+# ==========================
+# Cache & Testing
+# ==========================
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# ==========================
+# IDE
+# ==========================
+.idea/
+.vscode/
+
+# ==========================
+# Jupyter
+# ==========================
+.ipynb_checkpoints/
+
+# ==========================
+# Generated Reports
+# ==========================
+generated_reports/*
+!generated_reports/.gitkeep
+
+# ==========================
+# Vector Databases (Future)
+# ==========================
+vector_db/
