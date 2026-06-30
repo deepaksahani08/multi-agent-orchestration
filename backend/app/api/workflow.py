@@ -1,16 +1,21 @@
 from fastapi import APIRouter
 
-from app.core.gemini import llm
+from app.agents.planner import PlannerAgent
+from app.schemas.request import PlannerRequest
+
 
 router = APIRouter()
 
-@router.get("/test")
-def test_llm():
 
-    response = llm.invoke(
-        "Say hello in one sentence."
+planner = PlannerAgent()
+
+
+
+@router.post("/planner")
+def planner_route(request: PlannerRequest):
+
+    result = planner.run(
+        query = request.query
     )
 
-    return {
-        "response":response.content
-    }
+    return result.model_dump()
