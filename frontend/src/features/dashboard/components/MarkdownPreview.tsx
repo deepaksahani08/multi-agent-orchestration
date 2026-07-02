@@ -5,12 +5,14 @@ type Props = {
   content: string;
 };
 
-export function MarkdownPreview({ content }: Props) {
+export function MarkdownPreview({
+  content,
+}: Props) {
   return (
-    <div className="prose prose-slate max-w-none px-8 py-6">
+    <article className="prose prose-slate max-w-none">
       <ReactMarkdown remarkPlugins={[remarkGfm]}>
         {content}
       </ReactMarkdown>
-    </div>
+    </article>
   );
 }

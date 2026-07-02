@@ -3,7 +3,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     GOOGLE_API_KEY:str
-    MODEL_NAME:str = "gemini-2.5-flash"
+    MODEL_NAME:str = "gemini-3.1-flash-lite"
     TEMPERATURE:float=0.3
 
     model_config= SettingsConfigDict(

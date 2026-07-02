@@ -1,7 +1,6 @@
 "use client";
 
-import { Sparkles } from "lucide-react";
-import { useState } from "react";
+import { Loader2, Sparkles } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -9,8 +8,15 @@ import { Textarea } from "@/components/ui/textarea";
 
 import { ExamplePrompts } from "./ExamplePrompts";
 
+import { useWorkflowStore } from "@/store/workflow-store";
+
 export function PromptPanel() {
-  const [prompt, setPrompt] = useState("");
+ const {
+    prompt,
+    setPrompt,
+    generateReport,
+    loading,
+  } = useWorkflowStore();
 
   return (
     <Card className="ai-composer rounded-[28px] border-0 p-8">
@@ -37,6 +43,12 @@ export function PromptPanel() {
           <Textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.ctrlKey && e.key === "Enter") {
+                e.preventDefault();
+                generateReport();
+              }
+            }}
             placeholder="Create a market research report for NVIDIA AI in 2026..."
             className="min-h-56 resize-none border-0 bg-transparent px-5 py-4 text-base shadow-none focus-visible:ring-0"
           />
@@ -51,15 +63,28 @@ export function PromptPanel() {
             <Button
               size="lg"
               className="rounded-xl px-8"
-              disabled={!prompt.trim()}
+              onClick={generateReport}
+              disabled={loading || !prompt.trim()}
             >
-              🚀 Generate Report
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Generating...
+                </>
+              ) : (
+                <>
+                  🚀 Generate Report
+                </>
+              )}
             </Button>
+
+
           </div>
         </div>
 
         {/* Example Prompts */}
         <ExamplePrompts onSelect={setPrompt} />
+        
       </div>
     </Card>
   );

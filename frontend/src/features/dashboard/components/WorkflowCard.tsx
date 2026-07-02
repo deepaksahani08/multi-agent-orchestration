@@ -50,7 +50,35 @@ export function WorkflowCard({
           </div>
 
           {/* Right */}
+          
+          <div className="flex items-center gap-2">
           <StatusIndicator status={status} />
+
+          {status === "completed" && (
+            <span className="text-xs text-emerald-600">
+              Done
+            </span>
+          )}
+
+          {status === "running" && (
+            <span className="text-xs text-blue-600">
+              Running
+            </span>
+          )}
+
+          {status === "pending" && (
+            <span className="text-xs text-muted-foreground">
+              Pending
+            </span>
+          )}
+
+          {status === "failed" && (
+            <span className="text-xs text-red-600">
+              Failed
+            </span>
+          )}
+        </div>
+        
         </div>
       </Card>
     </motion.div>
