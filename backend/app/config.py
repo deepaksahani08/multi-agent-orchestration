@@ -6,13 +6,17 @@ class Settings(BaseSettings):
     MODEL_NAME:str = "gemini-3.1-flash-lite"
     TEMPERATURE:float=0.3
 
+    LANGSMITH_API_KEY:str | None = None
+    LANGSMITH_TRACING:bool = False
+    LANGSMITH_PROJECT:str = "multi-agent-orchestration"
+
     model_config= SettingsConfigDict(
         env_file=".env",
-        case_sensitive=True,
+        extra="ignore",
     )
 
 @lru_cache
-def get_seetings()->Settings:
+def get_settings()->Settings:
     return Settings()
 
-settings = get_seetings()
+settings = get_settings()

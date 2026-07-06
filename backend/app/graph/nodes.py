@@ -14,13 +14,14 @@ Nodes simply:
     3. Update WorkflowState
     4. Return WorkflowState
 """
-
+from langchain_core.runnables import RunnableConfig
 from app.agents.analysis import AnalysisAgent
 from app.agents.planner import PlannerAgent
 from app.agents.report import ReportAgent
 from app.agents.research import ResearchAgent
 from app.schemas.agent import AgentStatus
 from app.schemas.workflow import WorkflowState
+
 
 # ----------------------------------------------------
 # Agent Instances
@@ -37,9 +38,10 @@ report_agent = ReportAgent()
 # ----------------------------------------------------
 
 
-def planner_node(state: WorkflowState) -> WorkflowState:
+def planner_node(state: WorkflowState, config: RunnableConfig,) -> WorkflowState:
    
     """Generate the execution plan."""
+    _ = config
 
     state.agent_status.append(
         AgentStatus(name="Planner", status="running")
@@ -59,8 +61,9 @@ def planner_node(state: WorkflowState) -> WorkflowState:
 # Research Node
 # ----------------------------------------------------
 
-def research_node(state: WorkflowState) -> WorkflowState:
+def research_node(state: WorkflowState,config: RunnableConfig,) -> WorkflowState:
     """Collect research information."""
+    _ = config
 
     state.agent_status.append(
         AgentStatus(
@@ -83,8 +86,9 @@ def research_node(state: WorkflowState) -> WorkflowState:
 # ----------------------------------------------------
 
 
-def analysis_node(state: WorkflowState) -> WorkflowState:
+def analysis_node(state: WorkflowState, config: RunnableConfig) -> WorkflowState:
     """Analyze research findings."""
+    _ = config
 
     state.agent_status.append(
         AgentStatus(
@@ -108,8 +112,9 @@ def analysis_node(state: WorkflowState) -> WorkflowState:
 # ----------------------------------------------------
 
 
-def report_node(state: WorkflowState) -> WorkflowState:
+def report_node(state: WorkflowState, config: RunnableConfig) -> WorkflowState:
     """Generate the final report."""
+    _ = config
 
     state.agent_status.append(
         AgentStatus(

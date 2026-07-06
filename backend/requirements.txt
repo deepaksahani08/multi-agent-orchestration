@@ -8,3 +8,4 @@ pydantic-settings
 python-docx
 reportlab
 langgraph
+langsmith

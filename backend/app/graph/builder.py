@@ -18,6 +18,7 @@ from app.graph.nodes import (
 )
 
 from app.schemas.workflow import WorkflowState
+from app.graph.router import workflow_router
 
 def build_graph():
     """ Create and compile the LangGraph workflow."""
@@ -37,7 +38,7 @@ def build_graph():
     # Define Workflow
     # --------------------------------------------------
 
-    builder.add_edge(START, "planner")
+    builder.add_conditional_edges(START,workflow_router)
 
     builder.add_edge("planner", "research")
 
