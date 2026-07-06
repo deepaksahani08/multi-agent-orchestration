@@ -3,18 +3,15 @@ Graph Runtime
 
 Responsible for executing the compiled LangGraph.
 
-This layer isolates execution concerns from graph construction.
-
 Future responsibilities:
-
 - LangSmith tracing
 - Streaming
 - Checkpointing
-- Retry policies
+- Retry
 - Human approval
-- Metrics
-- Logging
 """
+
+from langchain_core.runnables import RunnableConfig
 
 from app.graph.builder import graph
 from app.schemas.workflow import WorkflowState
@@ -22,27 +19,34 @@ from app.schemas.workflow import WorkflowState
 
 class GraphRuntime:
     """
-    Executes the LangGraph workflow.
+    Executes the compiled LangGraph.
     """
 
     def invoke(
         self,
         state: WorkflowState,
+        config: RunnableConfig | None = None,
     ) -> WorkflowState:
         """
-        Execute the workflow synchronously.
+        Execute the workflow.
 
         Args:
             state: Initial workflow state.
+            config: Optional LangGraph execution configuration.
 
         Returns:
-            Updated workflow state.
+            WorkflowState
         """
 
-        result = graph.invoke(state)
+    
 
+        result = graph.invoke(
+            input=state,
+            config=config,
+        )
+
+    
         return WorkflowState.model_validate(result)
 
 
-# Singleton Runtime
 runtime = GraphRuntime()

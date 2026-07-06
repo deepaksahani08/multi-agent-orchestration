@@ -21,6 +21,7 @@ from app.agents.report import ReportAgent
 from app.agents.research import ResearchAgent
 from app.schemas.agent import AgentStatus
 from app.schemas.workflow import WorkflowState
+from langsmith import traceable
 
 
 # ----------------------------------------------------
@@ -37,7 +38,7 @@ report_agent = ReportAgent()
 # Planner Node
 # ----------------------------------------------------
 
-
+@traceable(run_type="chain", name="Planner Node")
 def planner_node(state: WorkflowState, config: RunnableConfig,) -> WorkflowState:
    
     """Generate the execution plan."""
@@ -53,6 +54,7 @@ def planner_node(state: WorkflowState, config: RunnableConfig,) -> WorkflowState
         )
     
     state.agent_status[-1].status = "completed"
+    
 
     return state
 
@@ -60,7 +62,7 @@ def planner_node(state: WorkflowState, config: RunnableConfig,) -> WorkflowState
 # ----------------------------------------------------
 # Research Node
 # ----------------------------------------------------
-
+@traceable(run_type="chain", name="Research Node")
 def research_node(state: WorkflowState,config: RunnableConfig,) -> WorkflowState:
     """Collect research information."""
     _ = config
@@ -79,13 +81,15 @@ def research_node(state: WorkflowState,config: RunnableConfig,) -> WorkflowState
 
     state.agent_status[-1].status = "completed"
 
+  
+
     return state
 
 # ----------------------------------------------------
 # Analysis Node
 # ----------------------------------------------------
 
-
+@traceable(run_type="chain", name="Analysis Node")
 def analysis_node(state: WorkflowState, config: RunnableConfig) -> WorkflowState:
     """Analyze research findings."""
     _ = config
@@ -103,6 +107,7 @@ def analysis_node(state: WorkflowState, config: RunnableConfig) -> WorkflowState
     )
 
     state.agent_status[-1].status = "completed"
+  
 
     return state
 
@@ -111,7 +116,7 @@ def analysis_node(state: WorkflowState, config: RunnableConfig) -> WorkflowState
 # Report Node
 # ----------------------------------------------------
 
-
+@traceable(run_type="chain", name="Report Node")
 def report_node(state: WorkflowState, config: RunnableConfig) -> WorkflowState:
     """Generate the final report."""
     _ = config
@@ -135,5 +140,7 @@ def report_node(state: WorkflowState, config: RunnableConfig) -> WorkflowState:
     )
 
     state.agent_status[-1].status = "completed"
+
+
 
     return state

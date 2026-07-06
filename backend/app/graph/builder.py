@@ -53,7 +53,11 @@ def build_graph():
     # Compile
     # --------------------------------------------------
 
+
     return builder.compile()
+   
+
+
 
 
 # Singleton Graph Instance

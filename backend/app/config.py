@@ -1,5 +1,12 @@
+from pathlib import Path
+from dotenv import load_dotenv
 from functools import lru_cache
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+load_dotenv(BASE_DIR / ".env")
 
 class Settings(BaseSettings):
     GOOGLE_API_KEY:str
@@ -7,7 +14,8 @@ class Settings(BaseSettings):
     TEMPERATURE:float=0.3
 
     LANGSMITH_API_KEY:str | None = None
-    LANGSMITH_TRACING:bool = False
+    LANGSMITH_ENDPOINT:str = "https://api.smith.langchain.com"
+    LANGSMITH_TRACING:bool = True
     LANGSMITH_PROJECT:str = "multi-agent-orchestration"
 
     model_config= SettingsConfigDict(
