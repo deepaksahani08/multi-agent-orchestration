@@ -1,44 +1,38 @@
-from app.agents.analysis import AnalysisAgent
-from app.agents.planner import PlannerAgent
-from app.agents.research import ResearchAgent
-from app.agents.report import ReportAgent
+"""
+Workflow Service
+
+Acts as the orchestration layer between the API and LangGraph.
+
+The API should never call LangGraph directly.
+
+If the orchestration engine changes in the future,
+only this file needs to change.
+"""
+
+from app.graph.builder import graph
 from app.schemas.workflow import WorkflowState
 
 
 class Workflow:
-
-    def __init__(self):
-        self.planner = PlannerAgent()
-        self.research = ResearchAgent()
-        self.analysis = AnalysisAgent()
-        self.report = ReportAgent()
+    """
+    Workflow wrapper around LangGraph.
+    """
 
     def invoke(self, query: str) -> WorkflowState:
+        """
+        Execute the LangGraph workflow.
 
-        state = WorkflowState(query=query)
+        Args:
+            query: User prompt.
 
-        state.plan = self.planner.run(query=query)
+        Returns:
+            WorkflowState
+        """
 
-        state.research = self.research.run(
-            goal=state.plan.goal,
-            tasks="\n".join(state.plan.tasks),
+        initial_state = WorkflowState(
+            query=query,
         )
 
-        state.analysis = self.analysis.run(
-            summary=state.research.summary,
-            findings="\n".join(state.research.findings),
-        )
+        result = graph.invoke(initial_state)
 
-        state.report = self.report.run(
-        goal=state.plan.goal,
-        summary=state.research.summary,
-        findings="\n".join(state.research.findings),
-        insights="\n".join(state.analysis.insights),
-        trends="\n".join(state.analysis.trends),
-        opportunities="\n".join(state.analysis.opportunities),
-        risks="\n".join(state.analysis.risks),
-        recommendations="\n".join(state.analysis.recommendations),
-
-        )
-
-        return state
+        return WorkflowState.model_validate(result)
