@@ -14,17 +14,18 @@ Future:
 
 from typing import Literal
 
+from app.schemas.guardrail import GuardrailCategory
 from app.schemas.workflow import WorkflowState
 
 
 def workflow_router(
     state: WorkflowState,
-) -> Literal["planner"]:
-    """
-    Decide which workflow should execute.
+) -> Literal["planner", "__end__"]:
 
-    Currently every request uses
-    the Planner workflow.
-    """
+    if state.guardrail is None:
+        return "__end__"
 
-    return "planner"
+    if state.guardrail.category == GuardrailCategory.SAFE:
+        return "planner"
+
+    return "__end__"

@@ -21,7 +21,10 @@ from app.agents.report import ReportAgent
 from app.agents.research import ResearchAgent
 from app.schemas.agent import AgentStatus
 from app.schemas.workflow import WorkflowState
-from langsmith import traceable
+
+from app.agents.guardrail import GuardrailAgent
+from app.schemas.guardrail import GuardrailCategory
+# from langsmith import traceable
 
 
 # ----------------------------------------------------
@@ -32,13 +35,52 @@ planner_agent = PlannerAgent()
 research_agent = ResearchAgent()
 analysis_agent = AnalysisAgent()
 report_agent = ReportAgent()
+guardrail = GuardrailAgent()
+
+
+
+# ----------------------------------------------------
+# Gauirdrail Node
+# ----------------------------------------------------
+
+def guardrail_node(state: WorkflowState, config: RunnableConfig,) -> WorkflowState:
+    """
+    Guardrail Node
+
+    Reads:
+        - query
+
+    Writes:
+        - guardrail
+        - agent_status
+    """
+
+    _ = config
+
+    result = guardrail.run(
+        query=state.query,
+    )
+
+    state.guardrail = result
+
+    state.agent_status.append(
+        AgentStatus(
+            name="Guardrail",
+            status="completed",
+        )
+    )
+
+    return state
+
 
 
 # ----------------------------------------------------
 # Planner Node
 # ----------------------------------------------------
 
-@traceable(run_type="chain", name="Planner Node")
+
+
+# @traceable(run_type="chain", name="Planner Node")
 def planner_node(state: WorkflowState, config: RunnableConfig,) -> WorkflowState:
    
     """Generate the execution plan."""
@@ -62,7 +104,7 @@ def planner_node(state: WorkflowState, config: RunnableConfig,) -> WorkflowState
 # ----------------------------------------------------
 # Research Node
 # ----------------------------------------------------
-@traceable(run_type="chain", name="Research Node")
+# @traceable(run_type="chain", name="Research Node")
 def research_node(state: WorkflowState,config: RunnableConfig,) -> WorkflowState:
     """Collect research information."""
     _ = config
@@ -89,7 +131,7 @@ def research_node(state: WorkflowState,config: RunnableConfig,) -> WorkflowState
 # Analysis Node
 # ----------------------------------------------------
 
-@traceable(run_type="chain", name="Analysis Node")
+# @traceable(run_type="chain", name="Analysis Node")
 def analysis_node(state: WorkflowState, config: RunnableConfig) -> WorkflowState:
     """Analyze research findings."""
     _ = config
@@ -116,7 +158,7 @@ def analysis_node(state: WorkflowState, config: RunnableConfig) -> WorkflowState
 # Report Node
 # ----------------------------------------------------
 
-@traceable(run_type="chain", name="Report Node")
+# @traceable(run_type="chain", name="Report Node")
 def report_node(state: WorkflowState, config: RunnableConfig) -> WorkflowState:
     """Generate the final report."""
     _ = config

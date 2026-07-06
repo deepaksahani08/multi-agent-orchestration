@@ -10,11 +10,14 @@ Business logic belongs inside nodes.py
 
 from langgraph.graph import END, START, StateGraph
 
+
+
 from app.graph.nodes import (
-    analysis_node,
+    guardrail_node,
     planner_node,
-    report_node,
     research_node,
+    analysis_node,
+    report_node,
 )
 
 from app.schemas.workflow import WorkflowState
@@ -33,12 +36,15 @@ def build_graph():
     builder.add_node("research", research_node)
     builder.add_node("analysis", analysis_node)
     builder.add_node("report", report_node)
+    builder.add_node("guardrail", guardrail_node)
 
      # --------------------------------------------------
     # Define Workflow
     # --------------------------------------------------
 
-    builder.add_conditional_edges(START,workflow_router)
+    builder.add_edge(START, "guardrail",)
+
+    builder.add_conditional_edges("guardrail", workflow_router,)
 
     builder.add_edge("planner", "research")
 
