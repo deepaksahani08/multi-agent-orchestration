@@ -24,6 +24,7 @@ from app.schemas.workflow import WorkflowState
 
 from app.agents.guardrail import GuardrailAgent
 from app.schemas.guardrail import GuardrailCategory
+from app.evaluation.runner import runner
 # from langsmith import traceable
 
 
@@ -36,8 +37,39 @@ research_agent = ResearchAgent()
 analysis_agent = AnalysisAgent()
 report_agent = ReportAgent()
 guardrail = GuardrailAgent()
+evaluation_runner = runner
 
 
+# ----------------------------------------------------
+# Evolution Node
+# ----------------------------------------------------
+def evaluation_node(
+    state: WorkflowState,
+    config: RunnableConfig,
+) -> WorkflowState:
+    """
+    Evaluation Node
+
+    Evaluates the generated report.
+    """
+
+    _ = config
+
+    result = evaluation_runner.evaluate(
+        query=state.query,
+        report=state.report.markdown,
+    )
+
+    state.evaluation = result
+
+    state.agent_status.append(
+        AgentStatus(
+            name="Evaluation",
+            status="completed",
+        )
+    )
+
+    return state
 
 # ----------------------------------------------------
 # Gauirdrail Node

@@ -6,6 +6,7 @@ from app.schemas.planner import PlannerOutput
 from app.schemas.research import ResearchOutput
 from app.schemas.report import ReportOutput
 from app.schemas.guardrail import GuardrailOutput
+from app.schemas.evaluation_result import EvaluationResult
 
 
 
@@ -21,5 +22,9 @@ class WorkflowState(BaseModel):
     analysis: AnalysisOutput | None = None
 
     report: ReportOutput | None = None
+    
+    evaluation: EvaluationResult | None = None
+
+
 
     agent_status: list[AgentStatus] = Field(default_factory=list)
