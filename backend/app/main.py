@@ -21,6 +21,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/")
+def root():
+    return {
+        "message": "Multi-Agent Orchestration API is running 🚀"
+    }
+
 app.include_router(health_router)
 app.include_router(workflow_router)
 app.include_router(download_router)
